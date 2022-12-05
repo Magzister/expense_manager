@@ -1,0 +1,12 @@
+select brand.title, count("notebooks_notebook".id) as count
+from "notebooks_notebook"
+join "notebooks_brand" as brand on "notebooks_notebook".brand_id = brand.id
+group by brand.title
+order by count desc;
+
+select round((width + 5/2)/5)*5 as w,
+       round((depth + 5/2)/5)*5 as d,
+       round((height + 5/2)/5)*5 as h,
+       count(id) as count
+from "notebooks_notebook"
+group by w, d, horder by w asc;
