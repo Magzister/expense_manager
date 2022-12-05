@@ -3,10 +3,12 @@ LABEL maintainer="daniil.kulbackiy@gmail.com"
 
 ENV PYTHONUNBUFFERED 1
 
+COPY ./entrypoint /entrypoint
+COPY ./celery/beat/start /celery/start-celerybeat
+COPY ./celery/worker/start /celery/start-celeryworker
 COPY ./requirements.txt /requirements.txt
 COPY ./app /app
 
-WORKDIR /app
 EXPOSE 8000
 
 RUN python -m venv /py && \
@@ -20,8 +22,13 @@ RUN python -m venv /py && \
     mkdir -p /vol/web/static && \
     mkdir -p /vol/web/media && \
     chown -R app:app /vol && \
-    chmod -R 755 /vol
+    chmod -R 755 /vol && \
+    chmod +x /entrypoint && \
+    chmod +x /celery/start-celerybeat && \
+    chmod +x /celery/start-celeryworker
 
 ENV PATH="/py/bin:$PATH"
 
 USER app
+
+ENTRYPOINT ["/entrypoint"]

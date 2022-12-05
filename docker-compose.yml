@@ -4,8 +4,9 @@ services:
   app:
     build:
       context: .
+    image: expense_manager_web
     command: >
-      sh -c "python manage.py wait_for_db &&
+      sh -c "cd app &&
              python manage.py makemigrations &&
              python manage.py migrate &&
              python manage.py loaddata core/fixtures/default_category.json &&
@@ -15,19 +16,40 @@ services:
     volumes:
       - ./app:/app
       - ./data/web:/vol/web
-    environment:
-      - SECRET_KEY=devsecretkey
-      - DEBUG=1
-      - DB_HOST=db
-      - DB_NAME=devdb
-      - DB_USER=devuser
-      - DB_PASS=changeme
+    env_file: .env
     depends_on:
       - db
+      - redis
 
   db:
     image: postgres:13-alpine
-    environment:
-      - POSTGRES_DB=devdb
-      - POSTGRES_USER=devuser
-      - POSTGRES_PASSWORD=changeme
+    env_file: .env
+
+  redis:
+    image: redis:7-alpine
+
+  celery_worker:
+    build:
+      context: .
+    image: expense_manager_celery_worker
+    command: >
+      sh -c ". ./celery/start-celeryworker"
+    volumes:
+      - ./app:/app
+    env_file: .env
+    depends_on:
+      - db
+      - redis
+
+  celery_beat:
+    build:
+      context: .
+    image: expense_manager_celery_beat
+    command: >
+      sh -c ". ./celery/start-celerybeat"
+    volumes:
+      - ./app:/app
+    env_file: .env
+    depends_on:
+      - db
+      - redis
