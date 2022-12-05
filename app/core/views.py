@@ -3,10 +3,8 @@ from decimal import Decimal
 from datetime import datetime
 
 
-from django.core.exceptions import ValidationError
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
-from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -14,7 +12,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 
-from core.models import User
 from core.models import Transaction
 from core.models import Category
 from core.models import Profile

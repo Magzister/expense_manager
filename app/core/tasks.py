@@ -20,7 +20,6 @@ MESSAGE_TRANSACTION_FORMAT = '-----------------------------\n' \
 
 @shared_task(bind=True)
 def send_mail_task(self):
-    print('Зашло')
     date_from = datetime.datetime.now() - datetime.timedelta(days=1)
 
     mail_subject = 'Expense statistic'
