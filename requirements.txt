@@ -5,3 +5,4 @@ djangorestframework-simplejwt==5.2.2
 celery==5.2.7
 django-celery-beat==2.4.0
 redis==4.3.5
+drf-yasg==1.21.4
